@@ -17,10 +17,10 @@ export function formatExchangeRate(result: CalculationResult): string {
 💱 *PRECIO DE CAMBIO USD/VES*
 
 📈 *Tasas individuales:*
-💵 USD → USDT (Zelle): $${result.usdToUsdtRate.toFixed(4)}
+💵 USD → USDT (Zelle, mín. $200): $${result.usdToUsdtRate.toFixed(4)}
    📊 Basado en ${result.usdToUsdtOffers} ofertas
 
-💰 USDT → VES (PM/Mercantil): ${result.usdtToVesRate.toFixed(2)} Bs
+💰 USDT → VES (PM/Mercantil, mín. 30,000 Bs): ${result.usdtToVesRate.toFixed(2)} Bs
    📊 Basado en ${result.usdtToVesOffers} ofertas
 
 ━━━━━━━━━━━━━━━━━━━
@@ -48,7 +48,7 @@ Soy un bot que calcula el precio de cambio *USD → VES* usando datos reales de 
 
 🔄 *Cómo funciono:*
 
-1️⃣ Busco el promedio de compra de *USD → USDT* usando *Zelle*
+1️⃣ Busco el promedio de compra de *USD → USDT* usando *Zelle* (mín. $200)
 2️⃣ Busco el promedio de venta de *USDT → VES* usando *Pago Móvil* o *Mercantil* (mín. 30,000 Bs)
 3️⃣ Calculo el precio final de *USD → VES*
 

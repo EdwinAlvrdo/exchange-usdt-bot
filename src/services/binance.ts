@@ -51,6 +51,7 @@ export async function fetchP2POffers(params: P2PSearchParams): Promise<BinanceP2
 
 /**
  * Obtiene el precio promedio de compra USD → USDT usando Zelle
+ * con un mínimo de 200 USD
  */
 export async function getUSDToUSDTRate(): Promise<{ rate: number; offerCount: number }> {
   const offers = await fetchP2POffers({
@@ -58,6 +59,7 @@ export async function getUSDToUSDTRate(): Promise<{ rate: number; offerCount: nu
     fiat: 'USD',
     tradeType: 'BUY',
     payTypes: ['Zelle'],
+    transAmount: '200',
     rows: 20,
   });
 
@@ -65,13 +67,23 @@ export async function getUSDToUSDTRate(): Promise<{ rate: number; offerCount: nu
     throw new Error('No offers found for USD to USDT');
   }
 
+  // Filtramos ofertas que cumplan con el mínimo de 200 USD
+  const validOffers = offers.filter((offer) => {
+    const minAmount = parseFloat(offer.adv.minSingleTransAmount);
+    return minAmount <= 200;
+  });
+
+  if (validOffers.length === 0) {
+    throw new Error('No valid offers found for USD to USDT with minimum 200 USD');
+  }
+
   // Calculamos el promedio de los mejores precios
-  const prices = offers.map((offer) => parseFloat(offer.adv.price));
+  const prices = validOffers.map((offer) => parseFloat(offer.adv.price));
   const average = prices.reduce((a, b) => a + b, 0) / prices.length;
 
   return {
     rate: average,
-    offerCount: offers.length,
+    offerCount: validOffers.length,
   };
 }
 
