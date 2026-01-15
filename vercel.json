@@ -11,8 +11,5 @@
       "src": "/api/webhook",
       "dest": "/api/webhook.ts"
     }
-  ],
-  "env": {
-    "BOT_TOKEN": "@bot_token"
-  }
+  ]
 }
